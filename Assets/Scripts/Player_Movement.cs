@@ -2,37 +2,44 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
-    public float speed = 5f;     // Hareket hızı
-    public float xLimit = 3.5f;  // Sağ-sol sınır
+    public float maxSpeed = 650f;      // Maksimum hız (km/h)
+    public float acceleration = 80f;   // Hızlanma oranı (km/h/s)
+    public float deceleration = 50f;   // Yavaşlama oranı
+    public float xLimit = 3.5f;
+    public float sideSpeedMultiplier = 0.05f; // Hıza göre sağ-sol hız artışı
 
-void Update()
-{
-    float moveX = 0f;
+    private float currentSpeed = 0f;
+    private float moveX = 0f;
 
-    // Klavye ile kontrol
-    moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-
-    // Mouse ile kontrol
-    if (Input.GetMouseButton(0)) // Sol mouse tuşu basılıysa
+    void Update()
     {
-        Vector3 mousePos = Input.mousePosition;
-        if (mousePos.x > Screen.width / 2)
+        // Hızlanma
+        currentSpeed += acceleration * Time.deltaTime;
+        if (currentSpeed > maxSpeed) currentSpeed = maxSpeed;
+
+        // Sağ-sol hareket hızı hız ile orantılı olsun
+        float sideSpeed = currentSpeed * sideSpeedMultiplier;
+
+        // Hareket girişi
+        moveX = Input.GetAxis("Horizontal") * sideSpeed * Time.deltaTime;
+
+        if (Input.GetMouseButton(0))
         {
-            // Ekranın sağ tarafı: sağa git
-            moveX = speed * Time.deltaTime;
+            Vector3 mousePos = Input.mousePosition;
+            if (mousePos.x > Screen.width / 2)
+                moveX = sideSpeed * Time.deltaTime;
+            else
+                moveX = -sideSpeed * Time.deltaTime;
         }
-        else
-        {
-            // Ekranın sol tarafı: sola git
-            moveX = -speed * Time.deltaTime;
-        }
+
+        transform.Translate(moveX, 0, 0);
+        float clampedX = Mathf.Clamp(transform.position.x, -xLimit, xLimit);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+
+        // Hızı GameManager’a bildir
+        GameManager.Instance.SetSpeed(currentSpeed);
+
+Debug.Log("Player_Movement currentSpeed: " + currentSpeed);
+Debug.Log("GameManager CurrentSpeed: " + GameManager.Instance.CurrentSpeed);
     }
-
-    // Aracı hareket ettir
-    transform.Translate(moveX, 0, 0);
-
-    // X pozisyonunu sınırla
-    float clampedX = Mathf.Clamp(transform.position.x, -xLimit, xLimit);
-    transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
-}
 }

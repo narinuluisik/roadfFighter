@@ -2,14 +2,28 @@ using UnityEngine;
 
 public class EnemyCar : MonoBehaviour
 {
-    public float speed = 4f;
+    public float baseSpeed = 6f;
+    public float speedIncreaseRate = 0.1f; // zamanla hız artışı
+    private float currentSpeed;
+    private bool scoreGiven = false;
+
+    void Start()
+    {
+        currentSpeed = baseSpeed;
+    }
 
     void Update()
     {
-        // Düşman aşağı doğru hareket eder
-        transform.Translate(Vector3.down * speed * Time.deltaTime);
+        currentSpeed += speedIncreaseRate * Time.deltaTime;
 
-        // Ekrandan çıkarsa yok et
+        transform.Translate(Vector3.down * currentSpeed * Time.deltaTime);
+
+        if (!scoreGiven && transform.position.y < GameObject.FindGameObjectWithTag("Player").transform.position.y)
+        {
+            GameManager.Instance.AddScore(20);
+            scoreGiven = true;
+        }
+
         if (transform.position.y < -6f)
         {
             Destroy(gameObject);
@@ -20,27 +34,24 @@ public class EnemyCar : MonoBehaviour
     {
         if (collision.CompareTag("Player") && !GameManager.Instance.IsGameOver)
         {
-            // Skoru 10 düşür
             GameManager.Instance.RemoveScore(10);
+            
+        GameManager.Instance.currentFuel -= 60f;
+        if (GameManager.Instance.currentFuel < 0)
+            GameManager.Instance.currentFuel = 0;
 
-            // Skor 0 ise oyunu bitir
-            if (GetScore() <= 0)
+            // Çarpışma efektini tetikle
+            PlayerCollisionEffect effect = collision.GetComponent<PlayerCollisionEffect>();
+            if (effect != null)
             {
-                GameManager.Instance.GameOver();
+                effect.PlayCrashEffect();
             }
 
-            // Çarpan düşmanı yok et
+            if (GameManager.Instance.Score <= 0)
+                GameManager.Instance.GameOver();
+
+GameManager.Instance.RegisterHit();
             Destroy(gameObject);
         }
-    }
-
-    int GetScore()
-    {
-        // GameManager içindeki score'a direkt erişemiyoruz çünkü private.
-        // Bu yüzden sadece EnemyCar içinde geçici bir çözüm: UI'dan skor çekmek.
-        // Daha iyisi GameManager'a public int Score { get; } eklemek olur.
-        string scoreText = GameManager.Instance.scoreText.text.Replace("Score: ", "");
-        int.TryParse(scoreText, out int currentScore);
-        return currentScore;
     }
 }

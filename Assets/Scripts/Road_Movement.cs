@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Road_Movement : MonoBehaviour
 {
-  public Renderer  meshRenderer;
-  public float speed=0.5f;
-    void Start()
-    {
-        
-    }
-
+    public Renderer meshRenderer;
+    public float baseSpeed = 0.5f;
+    public float speedMultiplier = 0.03f;
 
     void Update()
     {
-       meshRenderer.material.mainTextureOffset += new Vector2(0,speed* Time.deltaTime);
+        float playerSpeed = GameManager.Instance != null ? GameManager.Instance.CurrentSpeed : 0f;
+
+        float moveSpeed = baseSpeed + playerSpeed * speedMultiplier;
+
+        meshRenderer.material.mainTextureOffset += new Vector2(0, moveSpeed * Time.deltaTime);
     }
 }
