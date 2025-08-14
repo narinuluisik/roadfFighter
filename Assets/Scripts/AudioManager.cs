@@ -3,14 +3,14 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    public AudioSource musicSource; // Arka plan müziği
+    public AudioSource musicSource; 
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  // Sahne değişse de yok olmasın
+            DontDestroyOnLoad(gameObject);  
         }
         else
         {

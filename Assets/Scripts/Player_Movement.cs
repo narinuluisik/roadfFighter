@@ -2,25 +2,24 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
-    public float maxSpeed = 650f;      // Maksimum hız (km/h)
-    public float acceleration = 80f;   // Hızlanma oranı (km/h/s)
-    public float deceleration = 50f;   // Yavaşlama oranı
+    public float maxSpeed = 650f;     
+    public float acceleration = 80f;   
+    public float deceleration = 50f;  
     public float xLimit = 3.5f;
-    public float sideSpeedMultiplier = 0.05f; // Hıza göre sağ-sol hız artışı
+    public float sideSpeedMultiplier = 0.05f; 
 
     private float currentSpeed = 0f;
     private float moveX = 0f;
 
     void Update()
     {
-        // Hızlanma
+        
         currentSpeed += acceleration * Time.deltaTime;
         if (currentSpeed > maxSpeed) currentSpeed = maxSpeed;
 
-        // Sağ-sol hareket hızı hız ile orantılı olsun
         float sideSpeed = currentSpeed * sideSpeedMultiplier;
 
-        // Hareket girişi
+        
         moveX = Input.GetAxis("Horizontal") * sideSpeed * Time.deltaTime;
 
         if (Input.GetMouseButton(0))
@@ -36,10 +35,10 @@ public class Player_Movement : MonoBehaviour
         float clampedX = Mathf.Clamp(transform.position.x, -xLimit, xLimit);
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
-        // Hızı GameManager’a bildir
+        
         GameManager.Instance.SetSpeed(currentSpeed);
 
-Debug.Log("Player_Movement currentSpeed: " + currentSpeed);
-Debug.Log("GameManager CurrentSpeed: " + GameManager.Instance.CurrentSpeed);
+          Debug.Log("Player_Movement currentSpeed: " + currentSpeed);
+          Debug.Log("GameManager CurrentSpeed: " + GameManager.Instance.CurrentSpeed);
     }
 }

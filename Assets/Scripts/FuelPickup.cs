@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class FuelPickup : MonoBehaviour
 {
-    public float fuelAmount = 300f;
-    public AudioClip pickupSound;  // Inspector'dan atanacak
+    public float fuelAmount = 100f;
+    public AudioClip pickupSound;  
     private AudioSource audioSource;
 
     private void Start()
@@ -20,7 +20,6 @@ public class FuelPickup : MonoBehaviour
             GameManager.Instance.AddFuel(fuelAmount);
             audioSource.Play();
 
-            // Ses çalarken objeyi hemen yok etmemek için destroy'i geciktiriyoruz
             Destroy(gameObject, pickupSound.length);
         }
     }

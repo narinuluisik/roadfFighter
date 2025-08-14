@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PlayerCollisionEffect : MonoBehaviour
 {
-    public AudioSource crashAudioSource; // Çarpışma sesi için AudioSource
+    public AudioSource crashAudioSource;
     public Camera mainCamera;
-    public float shakeDuration = 0.3f;  // Sarsılma süresi
-    public float shakeMagnitude = 0.1f; // Sarsılma şiddeti
+    public float shakeDuration = 0.3f;  
+    public float shakeMagnitude = 0.1f; 
 
     private float shakeTimeRemaining = 0f;
     private Vector3 originalCamPos;
@@ -19,7 +19,7 @@ public class PlayerCollisionEffect : MonoBehaviour
 
         if (crashAudioSource == null)
             crashAudioSource = GetComponent<AudioSource>();
-            
+
     }
 
     void Update()

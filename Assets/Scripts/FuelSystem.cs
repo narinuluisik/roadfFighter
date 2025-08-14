@@ -6,21 +6,20 @@ public class FuelSystem : MonoBehaviour
     public static FuelSystem Instance;
 
     [Header("Fuel Settings")]
-    public float maxFuel = 1500f;
+    public float maxFuel = 600f;
     public float currentFuel;
-    public float fuelDecreaseRate = 1.5f; // temel saniyede azalma (düşürüldü)
+    public float fuelDecreaseRate = 1.5f;
 
     [Header("UI")]
-    public Slider fuelSlider; // Inspector'dan ata
+    public Slider fuelSlider; 
 
     [Header("Optional Settings")]
-    public bool scaleWithSpeed = true; // hızla yakıt tükenmesini aktif et
-    public float baseSpeedForScale = 120f; // referans hız (artırıldı)
-    public float extraDrainPer100Speed = 0.6f; // +kaç birim/drain (düşürüldü)
+    public bool scaleWithSpeed = true; 
+    public float baseSpeedForScale = 120f; 
+    public float extraDrainPer100Speed = 0.6f;
 
     [Range(0.1f, 2f)]
-    public float drainMultiplier = 0.6f; // genel tüketim çarpanı (yakıt daha yavaş azalsın)
-
+    public float drainMultiplier = 0.6f; 
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -37,7 +36,6 @@ public class FuelSystem : MonoBehaviour
     {
         if (GameManager.Instance != null && GameManager.Instance.IsGameOver) return;
 
-        // Hıza bağlı ekstra drain (isteğe bağlı)
         float speedFactor = 1f;
         if (scaleWithSpeed && GameManager.Instance != null)
         {
@@ -51,7 +49,7 @@ public class FuelSystem : MonoBehaviour
         {
             currentFuel = 0f;
             UpdateUI();
-            // Yakıt bitti => Game Over
+       
             if (GameManager.Instance != null)
                 GameManager.Instance.GameOver();
             return;

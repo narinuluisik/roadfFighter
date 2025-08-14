@@ -18,13 +18,13 @@ public class GameManager : MonoBehaviour
     public float fuelConsumptionRate = 20f; 
 
     [Header("Çarpma Sistemi")]
-    public int maxConsecutiveHits = 3; // Üst üste en fazla kaç çarpma
-    public float hitResetTime = 3f;    // Çarpmalar arası süre (saniye)
+    public int maxConsecutiveHits = 3; 
+    public float hitResetTime = 3f;    
     private int currentHitCount = 0;
     private float lastHitTime = -999f;
 
-    public GameObject fuelPrefab; // Inspector'dan ata
-    public float fuelSpawnInterval = 5f; // Kaç saniyede bir spawn
+    public GameObject fuelPrefab; 
+    public float fuelSpawnInterval = 5f; 
     private float fuelSpawnTimer = 0f;
 
     public bool IsGameOver { get; private set; } = false;
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     {
         if (!IsGameOver)
         {
-            // Skor hesaplama
+           
             scoreTimer += Time.deltaTime;
             if (scoreTimer >= 1f)
             {
@@ -76,7 +76,6 @@ public class GameManager : MonoBehaviour
                 scoreTimer = 0f;
             }
 
-            // Yakıt azalması
             currentFuel -= fuelConsumptionRate * Time.deltaTime;
             currentFuel = Mathf.Clamp(currentFuel, 0f, maxFuel);
 
@@ -88,7 +87,6 @@ public class GameManager : MonoBehaviour
                 GameOver();
             }
 
-            // Yakıt spawn zamanı
             fuelSpawnTimer += Time.deltaTime;
             if (fuelSpawnTimer >= fuelSpawnInterval)
             {
@@ -159,12 +157,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Yeni çarpma kontrol sistemi
+
     public void RegisterHit()
     {
         float currentTime = Time.time;
 
-        // Önceki çarpmadan çok zaman geçtiyse sayacı sıfırla
+      
         if (currentTime - lastHitTime > hitResetTime)
         {
             currentHitCount = 0;
@@ -175,7 +173,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Üst üste çarpma sayısı: " + currentHitCount);
 
-        // Üst üste çarpma sınırına ulaştıysa Game Over
+      
         if (currentHitCount >= maxConsecutiveHits)
         {
             GameOver();

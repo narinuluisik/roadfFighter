@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyCar : MonoBehaviour
 {
     public float baseSpeed = 6f;
-    public float speedIncreaseRate = 0.1f; // zamanla hız artışı
+    public float speedIncreaseRate = 0.1f; 
     private float currentSpeed;
     private bool scoreGiven = false;
 
@@ -40,7 +40,6 @@ public class EnemyCar : MonoBehaviour
         if (GameManager.Instance.currentFuel < 0)
             GameManager.Instance.currentFuel = 0;
 
-            // Çarpışma efektini tetikle
             PlayerCollisionEffect effect = collision.GetComponent<PlayerCollisionEffect>();
             if (effect != null)
             {
@@ -50,7 +49,7 @@ public class EnemyCar : MonoBehaviour
             if (GameManager.Instance.Score <= 0)
                 GameManager.Instance.GameOver();
 
-GameManager.Instance.RegisterHit();
+           GameManager.Instance.RegisterHit();
             Destroy(gameObject);
         }
     }
